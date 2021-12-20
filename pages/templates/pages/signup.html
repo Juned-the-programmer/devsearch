@@ -29,15 +29,38 @@
           <p>Create a new developer account</p>
         </div>
 
-        <form action="#" class="form auth__form">
+        <form action="#" class="form auth__form" method="POST">
+          {% csrf_token %}
           <!-- Input:Text -->
           <div class="form__field">
-            <label for="formInput#text">Full Name: </label>
+            <label for="formInput#text">First Name: </label>
             <input
               class="input input--text"
               id="formInput#text"
               type="text"
-              name="text"
+              name="first_name"
+              placeholder="e.g. Dennis Ivanov"
+            />
+          </div>
+          
+          <div class="form__field">
+            <label for="formInput#text">Last Name: </label>
+            <input
+              class="input input--text"
+              id="formInput#text"
+              type="text"
+              name="last_name"
+              placeholder="e.g. Dennis Ivanov"
+            />
+          </div>
+
+          <div class="form__field">
+            <label for="formInput#text">User Name: </label>
+            <input
+              class="input input--text"
+              id="formInput#text"
+              type="text"
+              name="username"
               placeholder="e.g. Dennis Ivanov"
             />
           </div>
