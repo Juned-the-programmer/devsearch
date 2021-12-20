@@ -6,6 +6,7 @@ urlpatterns = [
     path('profile/',views.profile,name="profile"),
     path('login/',views.login,name="login"),
     path('signup/',views.signup,name="signup"),
+    path('logout/',views.logout,name="logout"),
     path('inbox/',views.inbox,name="inbox"),
     path('account/',views.account,name="account"),
     path('skill-form/',views.skill_form,name="skill-form"),
