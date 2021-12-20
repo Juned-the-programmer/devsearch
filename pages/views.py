@@ -22,8 +22,8 @@ def account(request):
 def skill_form(request):
     return render(request , "pages/skill-form.html")
 
-def user_form(request):
+def user_detail(request):
     return render(request , "pages/user-form.html")
 
 def message_form(request):
-    return render(request , "pages/message-form.html")
+    return render(request , "pages/message_form.html")
