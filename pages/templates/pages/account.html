@@ -57,15 +57,7 @@
         <div class="devInfo">
           <h3 class="devInfo__title">About Me</h3>
           <p class="devInfo__about">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex illum
-            ipsum iusto consequatur. Totam, dolorum fugiat, debitis facere illo
-            nostrum nesciunt maxime, deserunt enim voluptatibus modi natus velit
-            voluptatum. Dicta eritatis exercitationem ut quos a placeat
-            obcaecati? Architecto illum!
-            <br />
-            Amet consectetur adipisicing elit. Veritatis exercitationem ut quos
-            a placeat obcaecati? Architecto illum, atque delectus nemo dolorem
-            inventore ab facilis? Dolor placeat vel delectus ipsam ullam.
+            About me
           </p>
         </div>
         <div class="settings">
@@ -93,48 +85,14 @@
               >
             </td>
           </tr>
-          <tr>
-            <td class="settings__tableInfo">
-              <h4>Python</h4>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Est,
-                suscipit...
-              </p>
-            </td>
-            <td class="settings__tableActions">
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-edit"></i> Edit</a
-              >
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-x-mark-circle-o"></i> Delete</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td class="settings__tableInfo">
-              <h4>Django</h4>
-              <p>
-                Amet consectetur adipisicing elit. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Quod, odio Est, suscipit...
-              </p>
-            </td>
-            <td class="settings__tableActions">
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-edit"></i> Edit</a
-              >
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-x-mark-circle-o"></i> Delete</a
-              >
-            </td>
-          </tr>
         </table>
 
         <div class="settings">
           <h3 class="settings__title">Projects</h3>
-          <a class="tag tag--pill tag--sub settings__btn tag--lg" href="#"
+          <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'addproject' %}"
             ><i class="im im-plus"></i> Add Project</a
           >
-        </div>
+        </div>  
 
         <table class="settings__table">
           <tr>
@@ -145,50 +103,6 @@
             </td>
             <td class="settings__tableInfo">
               <a href="single-project.html">Yoga Studio Landing Page</a>
-              <p>
-                Consectetur adipisicing elit. Natus nam dolore aut sed vitae eos
-                architecto unde tempore exercitationem fugiat?...
-              </p>
-            </td>
-            <td class="settings__tableActions">
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-edit"></i> Edit</a
-              >
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-x-mark-circle-o"></i> Delete</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td class="settings__thumbnail">
-              <a href="single-project.html"
-                ><img src="images/project-b.png" alt="Project Thumbnail"
-              /></a>
-            </td>
-            <td class="settings__tableInfo">
-              <a href="single-project.html">DevSearch Website UI Design</a>
-              <p>
-                Consectetur adipisicing elit. Natus nam dolore aut sed vitae eos
-                architecto unde tempore exercitationem fugiat?...
-              </p>
-            </td>
-            <td class="settings__tableActions">
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-edit"></i> Edit</a
-              >
-              <a class="tag tag--pill tag--main settings__btn" href="#"
-                ><i class="im im-x-mark-circle-o"></i> Delete</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td class="settings__thumbnail">
-              <a href="single-project.html"
-                ><img src="images/project-a.png" alt="Project Thumbnail"
-              /></a>
-            </td>
-            <td class="settings__tableInfo">
-              <a href="single-project.html">Portfolio Website Design</a>
               <p>
                 Consectetur adipisicing elit. Natus nam dolore aut sed vitae eos
                 architecto unde tempore exercitationem fugiat?...
