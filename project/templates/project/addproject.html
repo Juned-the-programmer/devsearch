@@ -1,14 +1,14 @@
 {% extends 'pages/base.html' %}
 
 {% block title %}
-Add Project
+Project Form
 {% endblock title %}
 
 {% block content %}
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{project_form}}
+    {{form.as_p}}
     <input type="submit" value="Add Project"/>
 </form>
 

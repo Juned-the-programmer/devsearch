@@ -6,4 +6,13 @@
 
 <h1>All the Project</h1>
 
+{% for i in list_project %}
+    {{i.id}}
+    {{i.title}}
+    {{i.description}}
+    <h5><a href="{% url 'project-description' i.id %}">View</a></h5>
+    <h5><a href="{% url 'update_project' i.id %}">update</a></h5>
+    <h5><a href="{% url 'delete_project' i.id %}">Delete</a></h5>
+{% endfor %}
+
 {% endblock content %}
