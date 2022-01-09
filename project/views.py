@@ -14,7 +14,11 @@ def listproject(request):
 
 @login_required(login_url='login')
 def project_description(request,pk):
-    return render(request, "project/projectdisc.html")
+    project = Project.objects.get(id=pk)
+    context = {
+        'project': project
+    }
+    return render(request, "project/projectdisc.html" , context)
 
 @login_required(login_url='login')
 def add_project(request):
