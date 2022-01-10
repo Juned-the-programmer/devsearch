@@ -15,39 +15,50 @@
             >
             <img
               class="avatar avatar--xl dev__avatar"
-              src="https://avatars.githubusercontent.com/u/33843378"
+              src="{{profile.profile_image.url}}"
             />
-            <h2 class="dev__name">Dennis Ivanov</h2>
+            <h2 class="dev__name">{{profile.name}}</h2>
             <p class="dev__title">
-              Expirance FullStack Developer, Youtuber and Instructor
+              {{profile.short_intro}}
             </p>
-            <p class="dev__location">Based in Florida, USA</p>
+            <p class="dev__location">Based in {{profile.location}}</p>
+          
             <ul class="dev__social">
+              {% if profile.social_github %}
               <li>
-                <a title="Github" href="#" target="_blank"
+                <a title="Github" href="{{profile.social_github}}" target="_blank"
                   ><i class="im im-github"></i
                 ></a>
               </li>
+              {% endif %}
+              {% if profile.social_twitter %}
               <li>
-                <a title="Stackoverflow" href="#" target="_blank"
-                  ><i class="im im-stackoverflow"></i
-                ></a>
-              </li>
-              <li>
-                <a title="Twitter" href="#" target="_blank"
+                <a title="Twitter" href="{{profile.social_twitter}}" target="_blank"
                   ><i class="im im-twitter"></i
                 ></a>
               </li>
+              {% endif %}
+              {% if profile.social_linkedin %}
               <li>
-                <a title="LinkedIn" href="#" target="_blank"
+                <a title="LinkedIn" href="{{prfile.social_linkedin}}" target="_blank"
                   ><i class="im im-linkedin"></i
                 ></a>
               </li>
+              {% endif %}
+              {% if profile.social_youtube %}
               <li>
-                <a title="Personal Website" href="#" target="_blank"
+                <a title="Personal Website" href="{{profile.social_youtube}}" target="_blank"
+                  ><i class="im im-youtube"></i
+                ></a>
+              </li>
+              {% endif %}
+              {% if profile.social_website %}
+              <li>
+                <a title="Personal Website" href="{{profile.social_website}}" target="_blank"
                   ><i class="im im-globe"></i
                 ></a>
               </li>
+              {% endif %}
             </ul>
             <a href="#" class="btn btn--sub btn--lg">Send Message </a>
           </div>
@@ -57,7 +68,7 @@
         <div class="devInfo">
           <h3 class="devInfo__title">About Me</h3>
           <p class="devInfo__about">
-            About me
+            {{profile.bio}}
           </p>
         </div>
         <div class="settings">
@@ -68,12 +79,12 @@
         </div>
 
         <table class="settings__table">
+          {% for skill in profile.skill_set.all %}
           <tr>
             <td class="settings__tableInfo">
-              <h4>JavaScript</h4>
+              <h4>{{skill.name}}</h4>
               <p>
-                Consectetur adipisicing elit. Natus nam dolore aut sed vitae eos
-                architecto unde tempore exercitationem fugiat?...
+                {{skill.description}}
               </p>
             </td>
             <td class="settings__tableActions">
@@ -85,6 +96,8 @@
               >
             </td>
           </tr>
+
+          {% endfor %}
         </table>
 
         <div class="settings">
@@ -95,17 +108,17 @@
         </div>  
 
         <table class="settings__table">
+          {% for project in profile.project_set.all %}
           <tr>
             <td class="settings__thumbnail">
-              <a href="single-project.html"
-                ><img src="images/project-a.png" alt="Project Thumbnail"
+              <a href="{% url 'project-description' project.id %}"
+                ><img src="{{project.featured_image.url}}" alt="Project Thumbnail"
               /></a>
             </td>
             <td class="settings__tableInfo">
-              <a href="single-project.html">Yoga Studio Landing Page</a>
+              <a href="single-project.html">{{project.title}}</a>
               <p>
-                Consectetur adipisicing elit. Natus nam dolore aut sed vitae eos
-                architecto unde tempore exercitationem fugiat?...
+                {{project.description|slice:"150"}}
               </p>
             </td>
             <td class="settings__tableActions">
@@ -117,6 +130,7 @@
               >
             </td>
           </tr>
+          {% endfor %}
         </table>
       </div>
     </div>

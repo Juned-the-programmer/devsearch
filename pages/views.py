@@ -1,15 +1,30 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth.models import User , auth
 from django.contrib.auth.decorators import login_required
+from .models import *
 
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
-    return render(request , "pages/index.html")
+    profiles = Profile.objects.all()
+    context = {
+        'profiles' : profiles
+    }
+    return render(request , "pages/index.html" , context)
 
 @login_required(login_url='login')
-def profile(request):
-    return render(request , "pages/profile.html")
+def profile(request,pk):
+    profile = Profile.objects.get(id=pk)
+
+    topskill = profile.skill_set.exclude(description__exact="")
+    otherskill = profile.skill_set.filter(description="")
+
+    context = {
+        'profile' : profile,
+        'topskill' : topskill,
+        'otherskill' : otherskill
+    }
+    return render(request , "pages/profile.html",context)
 
 def login(request):
     if request.method == 'POST':
@@ -53,7 +68,11 @@ def inbox(request):
 
 @login_required(login_url='login')
 def account(request):
-    return render(request , "pages/account.html")     
+    profile = Profile.objects.get()
+    context = {
+        'profile' : profile
+    }
+    return render(request , "pages/account.html" , context)     
 
 @login_required(login_url='login')
 def skill_form(request):

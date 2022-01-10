@@ -1,9 +1,10 @@
 from django.db import models
 import uuid
+from pages.models import Profile
 
 # Create your models here.
 class Project(models.Model):
-    # owner = models.ForeignKey(Profile , on_delete=models.CASCADE , null=True,blank = True)
+    owner = models.ForeignKey(Profile , on_delete=models.SET_NULL , null=True,blank = True)
     title = models.CharField(max_length=200)
     featured_image = models.ImageField(upload_to="project_images", null=True, blank=True , default="default.jpg")
     description = models.TextField(null=True , blank=True)
