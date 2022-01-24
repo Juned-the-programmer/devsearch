@@ -16,8 +16,6 @@
   <!-- Dev Search UI -->
   <link rel="stylesheet" href="{% static 'css/app.css' %}" />
 
-  <link rel="stylesheet" href="{% static 'js/main.js' %}" />
-
   <title>
       {% block title %}{% endblock title %}
   </title>
@@ -27,8 +25,26 @@
 
     {% include 'pages/navbar.html' %}
 
+    {% comment %} {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}  {% endcomment %}
+
+  {% if messages %}
+     {% for message in messages %}
+      <diiv class="alert alert--{{message.tags}}"> 
+        <p class="alert__message">{{message}}</p>
+        <button class="alert__close">X</button>
+      </div>
+     {% endfor %}
+  {% endif %}
   {% block content %}
   
   {% endblock content %}
-
+  </body>
+<script src="{% static 'uikit/app.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 </html>

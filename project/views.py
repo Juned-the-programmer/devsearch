@@ -22,12 +22,15 @@ def project_description(request,pk):
 
 @login_required(login_url='login')
 def add_project(request):
+    user = request.user.username
     form = ProjectForm()
 
     if request.method == 'POST':
         form = ProjectForm(request.POST , request.FILES)
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+            project.owner = user
+            project.save()
             return redirect('listproject')
 
     context = {

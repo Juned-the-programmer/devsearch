@@ -1,7 +1,10 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth.models import User , auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login , authenticate
 from .models import *
+from .forms import *
+from django.contrib import messages
 
 # Create your views here.
 @login_required(login_url='login')
@@ -31,12 +34,17 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "Username does not existed")
+        
         user_login = auth.authenticate(username=username , password=password)
         if user_login is not None:
             auth.login(request,user_login)
             return redirect('index')
         else:
-            print("Login Error")
+            messages.error(request, "Username or password is not valid")
 
     return render(request , "pages/login.html")
 
@@ -60,7 +68,8 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('index')
+    messages.success(request , "User Logout ! ")
+    return redirect('login')
 
 @login_required(login_url='login')
 def inbox(request):
@@ -68,7 +77,7 @@ def inbox(request):
 
 @login_required(login_url='login')
 def account(request):
-    profile = Profile.objects.get()
+    profile = request.user.profile
     context = {
         'profile' : profile
     }
@@ -76,11 +85,68 @@ def account(request):
 
 @login_required(login_url='login')
 def skill_form(request):
-    return render(request , "pages/skill-form.html")
+    user = request.user.username
+    skill = SkillForm()
+
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.owner = user
+            skill.save()
+            return redirect('account')
+
+    context = {
+        'skill' : skill
+    }
+    return render(request , "pages/skill-form.html" , context)
 
 @login_required(login_url='login')
-def user_detail(request):
-    return render(request , "pages/user-form.html")
+def update_skill(request,pk):
+    skill_data = Skill.objects.get(id=pk)
+    skill = SkillForm(instance=skill_data)
+
+    if request.method == 'POST':
+        form = SkillForm(request.POST , instance=skill_data)
+        if form.is_valid():
+            form.save()
+            return redirect('account')
+
+    context = {
+        'skill' : skill
+    }
+    return render(request , "pages/skill-form.html" , context)
+
+@login_required(login_url='login')
+def delete_skill(request,pk):
+    skill_data = Skill.objects.get(id=pk)
+
+    if request.method == 'POST':
+        skill_data.delete()
+        return redirect('account')
+
+    context = {
+        'object' : skill_data
+    }
+    return render(request , "project/delete_object.html" , context)
+
+@login_required(login_url='login')
+def user_detail(request,pk):
+    profile_info = Profile.objects.get(id=pk)
+    
+    form = ProfileForm(instance=profile_info)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST , request.FILES , instance=profile_info)
+        if form.is_valid():
+            form.save()
+
+        return redirect('account')
+
+    context = {
+        'form' : form
+    }
+    return render(request , "pages/user-form.html" , context)
 
 @login_required(login_url='login')
 def message_form(request):
