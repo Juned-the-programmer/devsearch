@@ -59,7 +59,7 @@ def index(request):
 @login_required(login_url='login')
 def profile(request,pk):
     profile = Profile.objects.get(id=pk)
-
+    
     topskill = profile.skill_set.exclude(description__exact="")
     otherskill = profile.skill_set.filter(description="")
 
