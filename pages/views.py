@@ -5,13 +5,54 @@ from django.contrib.auth import login , authenticate
 from .models import *
 from .forms import *
 from django.contrib import messages
+from django.db.models import Q
+from django.core.paginator import Paginator , PageNotAnInteger , EmptyPage
+
 
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
-    profiles = Profile.objects.all()
+    search_query = ''
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+
+    skills = Skill.objects.filter(name__icontains=search_query)
+
+    profiles = Profile.objects.distinct().filter( 
+        Q(name__icontains=search_query) |
+        Q(short_intro__icontains=search_query)|
+        Q(skill__in=skills)
+    )
+
+    page = request.GET.get('page')
+    result = 10
+    paginator = Paginator(profiles , result)
+
+    try:
+        profiles = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        profiles = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        profiles = paginator.page(page)
+
+    left_index = (int(page) - 4)
+    if left_index < 1:
+        left_index = 1
+
+    right_index = (int(page) + 5)
+    if right_index > paginator.num_pages:
+        right_index = paginator.num_pages + 1
+
+    custom_range = range(left_index, right_index)
+
+
     context = {
-        'profiles' : profiles
+        'profiles' : profiles,
+        'search_query' : search_query,
+        'custom_range' : custom_range
     }
     return render(request , "pages/index.html" , context)
 
