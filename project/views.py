@@ -4,6 +4,7 @@ from .models import *
 from .forms import *
 from django.db.models import Q
 from django.core.paginator import Paginator , PageNotAnInteger , EmptyPage
+from django.contrib import messages
 
 # Create your views here.
 @login_required(login_url='login')
@@ -56,8 +57,26 @@ def listproject(request):
 @login_required(login_url='login')
 def project_description(request,pk):
     project = Project.objects.get(id=pk)
+    user = request.user.username
+    Form = ReviewForm()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)    
+            review.owner = request.user.profile
+            review.project = project
+            review.save()
+            
+            project.getVoteCount
+
+            messages.success(request , "Review Added ! ")
+            return redirect('project_description' , pk=project.id)
+
+
     context = {
-        'project': project
+        'project': project , 
+        'Form' : Form
     }
     return render(request, "project/projectdisc.html" , context)
 

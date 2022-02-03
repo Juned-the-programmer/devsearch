@@ -3,14 +3,13 @@ from django.contrib.auth.models import User , auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login , authenticate
 from .models import *
+from project.models import * 
 from .forms import *
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator , PageNotAnInteger , EmptyPage
 
-
 # Create your views here.
-@login_required(login_url='login')
 def index(request):
     search_query = ''
 
@@ -56,10 +55,9 @@ def index(request):
     }
     return render(request , "pages/index.html" , context)
 
-@login_required(login_url='login')
 def profile(request,pk):
     profile = Profile.objects.get(id=pk)
-    
+
     topskill = profile.skill_set.exclude(description__exact="")
     otherskill = profile.skill_set.filter(description="")
 
@@ -83,7 +81,7 @@ def login(request):
         user_login = auth.authenticate(username=username , password=password)
         if user_login is not None:
             auth.login(request,user_login)
-            return redirect('index')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'account')
         else:
             messages.error(request, "Username or password is not valid")
 
@@ -114,7 +112,11 @@ def logout(request):
 
 @login_required(login_url='login')
 def inbox(request):
-    return render(request , "pages/inbox.html")
+    profile = request.user.profile
+    messageRequests = profile.messages.all()
+    unreadCount = messageRequests.filter(is_read=False).count()
+    context = {'messageRequests': messageRequests, 'unreadCount': unreadCount}
+    return render(request , "pages/inbox.html" , context)
 
 @login_required(login_url='login')
 def account(request):
@@ -171,7 +173,6 @@ def delete_skill(request,pk):
     }
     return render(request , "project/delete_object.html" , context)
 
-@login_required(login_url='login')
 def user_detail(request,pk):
     profile_info = Profile.objects.get(id=pk)
     
@@ -189,6 +190,44 @@ def user_detail(request,pk):
     }
     return render(request , "pages/user-form.html" , context)
 
+def message_form(request,pk):
+    Form = MessageForm()
+    recipient = Profile.objects.get(id=pk)
+    
+    try:
+        sender = request.user.profile
+    except:
+        sender = None
+
+    if request.method == 'POST':
+        Form_data = MessageForm(request.POST)
+        if Form_data.is_valid():
+            message_data = Form_data.save(commit=False)
+            message_data.sender = sender
+            message_data.recipient = recipient
+
+            if sender:
+                message_data.name = sender.name
+                message_data.email = sender.email
+                
+            message_data.save()
+
+            return redirect('profile' , pk=recipient.id) 
+    
+    context = {
+        'Form' : Form ,
+        'recipient' : recipient
+    }
+    return render(request , "pages/message_form.html" , context)
+
 @login_required(login_url='login')
-def message_form(request):
-    return render(request , "pages/message_form.html")
+def read_message(request,pk):
+    message_content = Message.objects.get(id=pk)
+    if message_content.is_read == False:
+        message_content.is_read = True
+        message_content.save()
+        
+    context = {
+        'message_content' : message_content
+    }
+    return render(request,"pages/read_message.html" , context)

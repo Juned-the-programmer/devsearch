@@ -1,0 +1,23 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}
+Message 
+{% endblock title %}
+
+{% block content %}
+
+<main class="messagePage my-xl">
+    <div class="content-box">
+      <div class="message">
+        <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
+        <h2 class="message__subject">{{message_content.subject}}</h4>
+          <a href="{% url 'profile' message_content.sender.id %}" class="message__author">{{message_content.name}}</a>
+          <p class="message__date">{{message_content.created}}</p>
+          <div class="message__body">
+              {{message_content.body|linebreaksbr}}
+          </div>
+      </div>
+    </div>
+  </main>
+
+{% endblock content %}

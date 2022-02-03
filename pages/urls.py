@@ -12,6 +12,7 @@ urlpatterns = [
     path('skill-form/',views.skill_form,name="skill-form"),
     path('update-skill/<str:pk>/',views.update_skill,name="update-skill"),
     path('delete-skill/<str:pk>/',views.delete_skill,name="delete-skill"),
-    path('send-message/',views.message_form,name="send-message"),
+    path('send-message/<str:pk>/',views.message_form,name="send-message"),
+    path('read-message/<str:pk>/',views.read_message,name="read-message"),
     path('user-detail/<str:pk>/',views.user_detail,name="user-detail"),
 ]

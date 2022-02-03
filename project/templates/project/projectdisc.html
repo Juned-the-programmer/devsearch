@@ -22,11 +22,11 @@ Project Description
                 </div>
 
                 {% if project.source_link %}
-                <a class="singleProject__liveLink" href="#" target="_blank"><i class="im im-external-link"></i>Source Code </a>
+                <a class="singleProject__liveLink" href="{% url 'project.source_link' %}" target="_blank"><i class="im im-external-link"></i>Source Code </a>
                 {% endif %}
                 
                 {% if project.demo_link %}
-                <a class="singleProject__liveLink" href="#" target="_blank"><i class="im im-external-link"></i>Demo Link</a>
+                <a class="singleProject__liveLink" href="{% url 'project.demo_link' %}" target="_blank"><i class="im im-external-link"></i>Demo Link</a>
                 {% endif %}
 
             </div>
@@ -44,32 +44,44 @@ Project Description
                     <h5 class="project--rating">
                         {{project.vote_ratio}}% Postitive Feedback ({{project.vote_total}} Vote{{project.vote_total|pluralize:"s"}})
                     </h5>
-
-            <form class="form" method="POST">
+            
+            {% if request.user.profile.id in project.reviewer %}
+            <p>You have already submitted review for this project</p>
+            {% elif request.user.profile == project.owner %}
+            <p>You cannot review your own Work</p>
+            {% elif request.user.is_authenticated %}
+            <form class="form" action="{% url 'project-description' project.id %}" method="POST">
+                {% csrf_token %}
               <!-- Textarea -->
+              {% for field in Form %}
                 <div class="form__field">
-                    <label for="formInput#textarea">Comments: </label>
-                    <textarea class="input input--textarea" name="message" id="formInput#textarea"
-                    placeholder="Write your comments here..."></textarea>
+                    <label for="formInput#textarea">{{field.label}} : </label>
+                    {{field}}
                 </div>
+                {% endfor %}
                 <input class="btn btn--sub btn--lg" type="submit" value="Comments" />
             </form>
+            {% else %}
+                <a href="{% url 'login' %}?next={{request.path}}">Please Login to review</a>
+            {% endif %}
 
             <div class="commentList">
-                {% for comment in project. %}{% endfor %}
+
+                {% for comment in project.review_set.all %}
+                {% if comment.body %}
                 <div class="comment">
-                <a href="profile.html">
+                <a href="{% url 'profile' comment.owner.id %}">
                   <img class="avatar avatar--md"
-                    src="https://pbs.twimg.com/profile_images/1335382240931368961/b3wSZKj4_400x400.jpg" alt="user" />
+                    src="{{comment.owner.profile_image.url}}" alt="user" />
                 </a>
                 <div class="comment__details">
-                    <a href="profile.html" class="comment__author">Sulamita Ivanov</a>
+                    <a href="{% url 'profile' comment.owner.id %}" class="comment__author">{{comment.owner.name}}</a>
                     <p class="comment__info">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit alias numquam perferendis
-                        mollitia minus minima exercitationem possimus ab deserunt qui, soluta iusto doloribus eveniet
-                        similique consequuntur ratione, dignissimos ut magni laborum quo.
+                        {{comment.body|linebreaksbr}}
                     </p>
                 </div>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
