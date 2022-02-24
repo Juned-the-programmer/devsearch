@@ -23,9 +23,29 @@ class Project(models.Model):
         ordering = ['-vote_ratio' , '-vote_total' , 'title']
 
     @property
-    def reviewrs(self):
+    def imageURL(self):
+        try:
+            url = self.featured_image.url
+        except:
+            url = ''
+        return url
+
+    @property
+    def reviewers(self):
         queryset = self.review.set_all().values_list('owner__id' , flat=True)
         return quesryset
+
+    @property
+    def getVoteCount(self):
+        reviews = self.review_set.all()
+        upVotes = reviews.filter(value='up').count()
+        totalVotes = reviews.count()
+
+        ratio = (upVotes / totalVotes) * 100
+        self.vote_total = totalVotes
+        self.vote_ratio = ratio
+
+        self.save()
 
 
 class Review(models.Model):
@@ -47,18 +67,6 @@ class Review(models.Model):
 
     def __str__(self):
         return self.value
-
-    @property
-    def getVoteCount(self):
-        reviews = self.reviews_set.all()
-        upvotes = reviews.filter(value='up')
-        totalvotes = reviews.count()
-
-        ratio = (upvotes / totalvotes) * 100
-
-        self.vote_total = totalvotes
-        self.vote_ratio = ratio
-        self.save()
 
 class Tag(models.Model):
     name = models.CharField(max_length=200)
