@@ -10,24 +10,27 @@ from django.conf import settings
 def CreateProfile(sender , instance , created ,**kwargs):
     if created:
         user = instance
-        profile = Profile.objects.create(
-            user = user,
-            username = user.username,
-            email = user.email,
-            name = user.first_name
-        )
+        if user.is_superuser:
+            print("Super user")
+        else:
+            profile = Profile.objects.create(
+                user = user,
+                username = user.username,
+                email = user.email,
+                name = user.first_name
+            )
 
-        subject = "Welcome to DevSearch"
+            subject = "Welcome to DevSearch"
 
-        message = "We are glad to be here !"
+            message = "We are glad to be here !"
 
-        send_mail(
-            subject,
-            message,
-            settings.EMAIL_HOST_USER,
-            [profile.email],
-            fail_silently=False,
-        )
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [profile.email],
+                fail_silently=False,
+            )
 
 def updateUser(sender , instance , created , **kwargs):
     profile = instance
